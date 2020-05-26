@@ -3,13 +3,11 @@ import {Button, Col, Form, FormGroup} from "reactstrap";
 import FormElement from "../../components/UI/FormElement/FormElement";
 import {registerUser} from "../../store/actions/usersActions";
 import {connect} from "react-redux";
-import FacebookLogin from "../../components/UI/FacebookLogin/FacebookLogin";
 
 class Register extends Component {
   state = {
     username: '',
     password: '',
-    displayName: '',
   };
 
   inputChangeHandler = event => {
@@ -26,7 +24,6 @@ class Register extends Component {
     return (
       <Fragment>
         <h2>Registration</h2>
-        <FacebookLogin/>
         <Form onSubmit={this.onSubmitHandler}>
           <FormElement
             propertyName="username"
@@ -41,14 +38,6 @@ class Register extends Component {
             title="Password"
             type="password"
             value={this.state.password}
-            onChange={this.inputChangeHandler}
-            required
-          />
-          <FormElement
-            propertyName="displayName"
-            title="Display Name"
-            type="text"
-            value={this.state.displayName}
             onChange={this.inputChangeHandler}
             required
           />

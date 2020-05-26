@@ -3,7 +3,6 @@ import {Button, Col, Form, FormGroup} from "reactstrap";
 import FormElement from "../../components/UI/FormElement/FormElement";
 import {loginUser} from "../../store/actions/usersActions";
 import {connect} from "react-redux";
-import FacebookLogin from "../../components/UI/FacebookLogin/FacebookLogin";
 
 class Login extends Component {
   state = {
@@ -25,7 +24,6 @@ class Login extends Component {
     return (
       <Fragment>
         <h2>Login</h2>
-        <FacebookLogin />
         <Form onSubmit={this.onSubmitHandler}>
           <FormElement
             propertyName="username"

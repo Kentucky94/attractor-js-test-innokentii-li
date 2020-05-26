@@ -9,9 +9,8 @@ import {applyMiddleware, combineReducers, compose, createStore} from "redux";
 import './index.css';
 import App from './App';
 import {loadFromLocalStorage, localStorageMiddleware} from "./store/localStorage";
-import * as serviceWorker from './serviceWorker';
 import usersReducer from "./store/reducers/usersReducer";
-import picturesReducer from "./store/reducers/picturesReducer";
+import * as serviceWorker from './serviceWorker';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,7 +22,6 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const rootReducer = combineReducers({
   router: connectRouter(history),
   users: usersReducer,
-  pictures: picturesReducer,
 });
 
 const middleware = [
@@ -33,9 +31,7 @@ const middleware = [
 ];
 
 const enhancers = composeEnhancers(applyMiddleware(...middleware));
-
 const persistedState = loadFromLocalStorage();
-
 export const store = createStore(rootReducer, persistedState, enhancers);
 
 const app = (

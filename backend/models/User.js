@@ -11,7 +11,7 @@ const UserSchema = new mongoose.Schema({
     unique: true,
     validate: {
       validator: async function(value){
-        if(!this.isModified('password')) return true;
+        if(!this.isModified('username')) return true;
 
         const user = await User.findOne({username: value});
         if(user) throw new Error('This user already exists')
@@ -26,6 +26,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  role: {
+    type: String,
+    default: 'user',
+    enum: ['admin', 'user']
+  }
 });
 
 UserSchema.methods.generateToken = function(){

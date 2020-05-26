@@ -1,59 +1,42 @@
 const express = require('express');
-const axios = require('axios');
-const {nanoid} = require('nanoid');
 
-const config = require('../config');
 const User = require('../models/User');
+const auth = require('../middleware/auth');
+const permit = require('../middleware/permit');
 
 const router = express.Router();
 
+// find all users
+
+router.get('/', [auth, permit('admin')], async (req, res) => {
+  try{
+    const users = await User.find({}, 'username role');
+
+    return res.send(users);
+  }catch(error){
+    return res.status(400).send(error);
+  }
+});
+
+// find user by id
+
 router.get('/:id', async (req, res) => {
   try{
-    const user = await User.findOne({_id: req.params.id});
-    user.token = '';
-    return res.send(user);
-  }catch(error){
-    return res.status(400).send(error);
-  }
-});
-
-router.post('/facebook', async (req, res) => {
-  try{
-    const inputToken = req.body.accessToken;
-    const accessToken = config.facebook.appId + '|' + config.facebook.appSecret;
-    const url = `https://graph.facebook.com/debug_token?input_token=${inputToken}&access_token=${accessToken}`;
-
-    const response = await axios.get(url);
-
-    if(response.data.data.error) return res.status(401).send({message: 'Facebook token incorrect'});
-    if(response.data.data.user_id !== req.body.id) return res.status(401).send({message: 'Incorrect user ID'});
-
-    let user = await User.findOne({facebookId: req.body.id});
-
-    if(!user){
-      user = new User({
-        username: req.body.id,
-        facebookId: req.body.id,
-        password: nanoid(),
-        displayName: req.body.name,
-      });
-    }
-
-    user.generateToken();
-    await user.save();
+    const user = await User.findById(req.params.id, 'username role');
 
     return res.send(user);
   }catch(error){
     return res.status(400).send(error);
   }
 });
+
+// register new user
 
 router.post('/', async (req, res) => {
   try {
     const userData = {
       username: req.body.username,
       password: req.body.password,
-      displayName: req.body.displayName,
     };
 
     const user = new User(userData);
@@ -66,6 +49,8 @@ router.post('/', async (req, res) => {
     return res.status(400).send(error);
   }
 });
+
+//  login a user
 
 router.post('/sessions', async (req, res) => {
   try{
@@ -84,6 +69,8 @@ router.post('/sessions', async (req, res) => {
   }
 });
 
+// logout a user
+
 router.delete('/sessions', async (req, res) => {
   const success = {message: 'Success'};
 
@@ -98,9 +85,51 @@ router.delete('/sessions', async (req, res) => {
     await user.save();
 
     return res.send(success);
-  }catch(e){
-    return res.send(success);
+  }catch(error){
+    return res.status(400).send(error);
   }
 });
+
+// edit user
+
+router.patch('/:id', [auth, permit('admin')], async (req, res) => {
+  try{
+    const user = await User.findById(req.user._id);
+
+    if(!user) return res.status(400).send({error: 'No such user'});
+
+    if(req.body.username){
+      user.username = req.body.username;
+    }
+
+    if(req.body.password){
+      user.password = req.body.password;
+    }
+
+    await user.save();
+
+    return res.send(user)
+  }catch(error){
+    return res.status(400).send(error);
+  }
+});
+
+// delete a user
+
+router.delete('/:id', [auth, permit('admin'), async (req, res) => {
+  try{
+    const user = await User.findById(req.user._id);
+
+    if(!user) return res.status(400).send({error: 'No such user'});
+
+    await User.deleteOne({_id: req.params.id});
+
+    return res.send({message: 'User has been deleted'})
+  }catch(error){
+    return res.status(400).send(error);
+  }
+}]);
+
+
 
 module.exports = router;

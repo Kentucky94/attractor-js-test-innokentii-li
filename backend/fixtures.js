@@ -3,6 +3,7 @@ const {nanoid} = require('nanoid');
 
 const config = require('./config');
 const User = require('./models/User');
+const Category = require('./models/Category');
 
 const run = async () => {
   await mongoose.connect(config.database, config.databaseOptions);
@@ -17,6 +18,7 @@ const run = async () => {
     username: 'user1',
     password: 'password1',
     token: nanoid(),
+    role: 'admin',
   }, {
     username: 'user2',
     password: 'password2',
@@ -25,6 +27,14 @@ const run = async () => {
     username: 'user3',
     password: 'password3',
     token: nanoid(),
+  });
+
+  const [cat1, cat2, cat3] = await Category.create({
+    title: 'Technology'
+  }, {
+    title: 'Music'
+  }, {
+    title: 'Gaming'
   });
 
   mongoose.connection.close();
