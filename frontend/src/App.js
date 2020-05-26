@@ -9,6 +9,8 @@ import Register from "./containers/Register/Register";
 import MainPage from "./containers/MainPage/MainPage";
 import AdminPanel from "./containers/AdminPanel/AdminPanel";
 
+import './App.css'
+
 const ProtectedRoute = ({isAllowed, ...props}) => {
   return isAllowed ? <Route {...props} /> : <Redirect to='/' />
 };

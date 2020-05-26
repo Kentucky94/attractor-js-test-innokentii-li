@@ -1,37 +1,36 @@
 import React from 'react';
-import {Col, FormGroup, Input, Label} from "reactstrap";
+import {Input} from "reactstrap";
 import PropTypes from 'prop-types';
+import TextField from "@material-ui/core/TextField";
 
 const FormElement = props => {
-  let inputData = (
-    <Input
+  let inputComponent = (
+    <TextField
+      fullWidth
+      variant='outlined'
+      label={props.title}
       type={props.type}
       name={props.propertyName} id={props.propertyName}
       value={props.value}
       onChange={props.onChange}
       required={props.required}
       placeholder={props.placeholder}
+      helperText={props.error}
+      error={!!props.error}
     />
   );
 
-  if(props.type === 'file'){
-    inputData = (
-      <Input
-        type={props.type}
-        name={props.propertyName} id={props.propertyName}
-        onChange={props.onChange}
-      />
-    );
-  }
+  // if(props.type === 'file'){
+  //   inputComponent = (
+  //     <Input
+  //       type={props.type}
+  //       name={props.propertyName} id={props.propertyName}
+  //       onChange={props.onChange}
+  //     />
+  //   );
+  // }
 
-  return (
-    <FormGroup row>
-      <Label sm={2} for={props.propertyName}>{props.title}</Label>
-      <Col sm={10}>
-        {inputData}
-      </Col>
-    </FormGroup>
-  );
+  return inputComponent;
 };
 
 FormElement.propTypes = {
