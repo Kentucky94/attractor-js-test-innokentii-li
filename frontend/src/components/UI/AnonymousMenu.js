@@ -5,8 +5,8 @@ import {NavLink as RouterNavLink} from "react-router-dom";
 const AnonymousMenu = () => {
   return (
     <div>
-      <Button className='ml-2' tag={RouterNavLink} to='/login' color='success'>Login</Button>
       <Button className='ml-2' tag={RouterNavLink} to='/register' color='primary'>Register</Button>
+      <Button className='ml-2' tag={RouterNavLink} to='/login' color='primary'>Login</Button>
     </div>
   );
 };

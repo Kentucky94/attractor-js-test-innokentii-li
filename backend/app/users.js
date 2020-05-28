@@ -55,10 +55,10 @@ router.post('/', async (req, res) => {
 router.post('/sessions', async (req, res) => {
   try{
     const user = await User.findOne({username: req.body.username});
-    if (!user) return res.status(400).send({error: 'Username or password not correct!'});
+    if (!user) return res.status(400).send({errors: {username: {message: 'User not found!'}}});
 
     const isMatch = await user.comparePasswords(req.body.password);
-    if (!isMatch) return res.status(400).send({error: 'Username or password not correct!'});
+    if (!isMatch) return res.status(400).send({errors: {password: {message: 'Username or password not correct!'}}});
 
     user.generateToken();
     await user.save();
@@ -129,7 +129,5 @@ router.delete('/:id', [auth, permit('admin'), async (req, res) => {
     return res.status(400).send(error);
   }
 }]);
-
-
 
 module.exports = router;

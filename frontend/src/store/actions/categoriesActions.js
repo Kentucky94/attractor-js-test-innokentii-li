@@ -15,3 +15,34 @@ export const fetchCategories = () => {
     }
   }
 };
+
+export const createCategory = categoryData => {
+  return async dispatch => {
+    try{
+      await axiosOrders.post('/categories', categoryData);
+    }catch(error){
+      console.log(error);
+    }
+  }
+};
+
+export const editCategory = (categoryId, categoryData) => {
+  return async dispatch => {
+    try{
+      await axiosOrders.patch(`/categories/${categoryId}`, categoryData);
+    }catch(error){
+      console.log(error);
+    }
+  }
+};
+
+export const deleteCategory = categoryId => {
+  return async dispatch => {
+    try{
+      await axiosOrders.delete(`/categories/${categoryId}`)
+    }catch(error){
+      console.log(error);
+    }
+  }
+};
+

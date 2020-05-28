@@ -6,14 +6,18 @@ import thunkMiddleware from "redux-thunk";
 import {createBrowserHistory} from "history";
 import {applyMiddleware, combineReducers, compose, createStore} from "redux";
 
-import './index.css';
 import App from './App';
 import {loadFromLocalStorage, localStorageMiddleware} from "./store/localStorage";
 import usersReducer from "./store/reducers/usersReducer";
-import * as serviceWorker from './serviceWorker';
+import categoriesReducer from "./store/reducers/categoriesReducer";
+import articlesReducer from "./store/reducers/articlesReducer";
 
+import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
+import * as serviceWorker from './serviceWorker';
+
+
 
 const history = createBrowserHistory();
 
@@ -22,6 +26,8 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const rootReducer = combineReducers({
   router: connectRouter(history),
   users: usersReducer,
+  categories: categoriesReducer,
+  articles: articlesReducer,
 });
 
 const middleware = [

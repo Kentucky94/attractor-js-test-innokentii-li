@@ -6,13 +6,13 @@ import {useSelector} from "react-redux";
 import Layout from "./components/Layout/Layout";
 import Login from "./containers/Login/Login";
 import Register from "./containers/Register/Register";
-import MainPage from "./containers/MainPage/MainPage";
+import ErrorPage from "./containers/ErrorPage/ErrorPage";
 import AdminPanel from "./containers/AdminPanel/AdminPanel";
 
 import './App.css'
 
 const ProtectedRoute = ({isAllowed, ...props}) => {
-  return isAllowed ? <Route {...props} /> : <Redirect to='/' />
+  return isAllowed ? <Route {...props} /> : <Redirect to='/error' />
 };
 
 const App = () => {
@@ -22,11 +22,10 @@ const App = () => {
     <Layout>
       <ToastContainer />
       <Switch>
-        <Route path='/' exact component={MainPage}/>
+        <ProtectedRoute isAllowed={user && user.role === 'admin'} path='/' exact component={AdminPanel} />
         <Route path='/login' exact component={Login} />
         <Route path='/register' exact component={Register} />
-        <ProtectedRoute isAllowed={user && user.role === 'admin'} path='/admin' exact component={AdminPanel} />
-        <Route render={() => <Redirect to='/' />}/>
+        <Route path='/error' exact component={ErrorPage}/>
       </Switch>
     </Layout>
   );

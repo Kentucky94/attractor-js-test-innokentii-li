@@ -1,4 +1,4 @@
-import {FETCH_CATEGORIES_SUCCESS} from "../../actions/categoriesActions";
+import {FETCH_CATEGORIES_SUCCESS} from "../actions/categoriesActions";
 
 const initialState = {
   categories: [],
@@ -12,3 +12,5 @@ const categoriesReducer = (state = initialState, action) => {
       return state;
   }
 };
+
+export default categoriesReducer;

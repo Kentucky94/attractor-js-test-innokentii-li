@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import {connect} from "react-redux";
 
 import FormElement from "../../components/UI/FormElement/FormElement";
-import {loginUser} from "../../store/actions/usersActions";
+import {loginUser, removeUserErrors} from "../../store/actions/usersActions";
 
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -15,6 +15,10 @@ class Login extends Component {
     password: '',
   };
 
+  componentWillUnmount() {
+    this.props.removeErrors();
+  }
+
   inputChangeHandler = event => {
     this.setState({[event.target.name]: event.target.value})
   };
@@ -23,6 +27,14 @@ class Login extends Component {
     event.preventDefault();
 
     this.props.loginUser({...this.state});
+  };
+
+  getFieldError = fieldName => {
+    try{
+      return this.props.error.errors[fieldName].message;
+    }catch(error){
+      return undefined;
+    }
   };
 
   render() {
@@ -46,6 +58,7 @@ class Login extends Component {
                     value={this.state.username}
                     onChange={this.inputChangeHandler}
                     required
+                    error={this.getFieldError('username')}
                   />
                 </Grid>
                 <Grid item xs>
@@ -56,6 +69,7 @@ class Login extends Component {
                     value={this.state.password}
                     onChange={this.inputChangeHandler}
                     required
+                    error={this.getFieldError('password')}
                   />
                 </Grid>
                 <Grid item xs>
@@ -74,10 +88,12 @@ class Login extends Component {
 
 const mapStateToProps = state => ({
   user: state.users.user,
+  error: state.users.loginError,
 });
 
 const mapDispatchToProps = dispatch => ({
   loginUser: userData => dispatch(loginUser(userData)),
+  removeErrors: () => dispatch(removeUserErrors()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
