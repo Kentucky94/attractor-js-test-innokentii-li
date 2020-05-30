@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {Link as RouterNavLink} from 'react-router-dom'
 
 import SimpleModal from '../UI/Modal/Modal';
 
-import {Link as RouterNavLink} from 'react-router-dom'
 import {makeStyles} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
