@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const {nanoid} = require('nanoid');
 
 const Article = require('../models/Article');
 const auth = require('../middleware/auth');
@@ -50,7 +51,7 @@ router.post('/', [auth, permit('user', 'admin'), upload.single('image')], async 
 
 router.get('/', async (req, res) => {
   try{
-    const articles = await Article.find().populate({path: 'user category', select: ['username']});
+    const articles = await Article.find().populate({path: 'user category', select: ['username', 'title']});
 
     return res.send(articles);
   }catch(error){

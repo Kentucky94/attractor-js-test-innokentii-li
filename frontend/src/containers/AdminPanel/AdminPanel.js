@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
+import {connect} from "react-redux";
+
 import MasterTable from "../../components/MasterTable/MasterTable";
 import {fetchUsers} from "../../store/actions/usersActions";
-import {connect} from "react-redux";
 import {fetchCategories} from "../../store/actions/categoriesActions";
 import {fetchArticles} from "../../store/actions/articlesActions";
 
@@ -13,57 +14,74 @@ class AdminPanel extends Component {
   }
 
   render() {
-    // const userRows = [
-    //   {_id: 1, username: 'user1', role: 'user'},
-    //   {_id: 2, username: 'user2', role: 'user'},
-    //   {_id: 3, username: 'user3', role: 'user'},
-    //   {_id: 4, username: 'user4', role: 'user'},
-    //   {_id: 5, username: 'user5', role: 'admin'},
-    //   {_id: 6, username: 'user1', role: 'user'},
-    //   {_id: 7, username: 'user2', role: 'user'},
-    //   {_id: 8, username: 'user3', role: 'user'},
-    //   {_id: 9, username: 'user4', role: 'user'},
-    //   {_id: 10, username: 'user5', role: 'admin'},
-    // ];
-
     let usersRows = [];
     let categoriesRows = [];
     let articlesRows = [];
 
     if(this.props.users){
       usersRows = this.props.users.map(user => {
-        return {id: user._id, name: user.username, prop1: user.role,}
+        const modalTitle = user.username;
+        const modalContent = 'Role: ' + user.role;
+
+        return {
+          id: user._id,
+          name: user.username,
+          propNum1: user.role,
+          modalTitle,
+          modalContent,
+        }
       });
     }
 
     if(this.props.categories){
       categoriesRows = this.props.categories.map(category => {
-        return {id: category._id, name: category.title,}
+        const modalTitle = category.title;
+
+        return {
+          id: category._id,
+          name: category.title,
+          propNum1: '    ',
+          modalTitle,
+        }
       });
     }
 
     if(this.props.articles){
       articlesRows = this.props.articles.map(article => {
-        return {id: article._id, name: article.title, prop1: article.user.username}
+        const modalTitle = article.title;
+        const modalContent = article.description;
+        const modalImage = `http://localhost:8080/uploads/${article.image}`;
+
+        return {
+          id: article._id,
+          name: article.title,
+          propNum1: article.user.username,
+          propNum2: article.category.title,
+          modalTitle,
+          modalImage,
+          modalContent,
+        }
       });
     }
 
     const usersHeadCells = [
-      { id: 'name', alignRight: false, label: 'UserName'},
-      { id: 'prop1', alignRight: true, label: 'Role'},
+      { id: 'name', alignRight: false, label: 'UserName', },
+      { id: 'propNum1', alignRight: true, label: 'Role', },
       { id: 'dummy1', alignRight: true, },
-      { id: 'addCell', alignRight: true, isAddButton: true, path: '/users/add', },
+      { id: 'dummy2', alignRight: true, },
     ];
 
     const categoriesHeadCells = [
-      { id: 'name', alignRight: false, label: 'Title'},
+      { id: 'name', alignRight: false, label: 'Title', },
+      { id: 'propNum1', alignRight: true, label: '', },
       { id: 'dummy1', alignRight: true, },
       { id: 'addCell', alignRight: true, isAddButton: true, path: '/users/add', },
     ];
 
     const articlesHeadCells = [
-      { id: 'name', alignRight: false, label: 'Title'},
-      { id: 'prop1', alignRight: true, label: 'Author'},
+      { id: 'name', alignRight: false, label: 'Title', },
+      { id: 'propNum1', alignRight: true, label: 'Author', },
+      { id: 'propNum2', alignRight: true, label: 'Category', },
       { id: 'dummy1', alignRight: true, },
       { id: 'addCell', alignRight: true, isAddButton: true, path: '/users/add', },
     ];
@@ -73,16 +91,19 @@ class AdminPanel extends Component {
         <MasterTable
           rows={usersRows}
           headCells={usersHeadCells}
+          tableName='users'
         />
 
         <MasterTable
           rows={categoriesRows}
           headCells={categoriesHeadCells}
+          tableName='categories'
         />
 
         <MasterTable
           rows={articlesRows}
           headCells={articlesHeadCells}
+          tableName='articles'
         />
       </div>
     );

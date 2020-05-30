@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import SimpleModal from '../UI/Modal/Modal';
+
 import {makeStyles} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -12,6 +14,14 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
 import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import Collapse from "@material-ui/core/Collapse";
+import IconButton from "@material-ui/core/IconButton";
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 // styles
 
@@ -24,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   table: {
-    minWidth: 750,
+    minWidth: 350,
   },
   visuallyHidden: {
     border: 0,
@@ -45,10 +55,15 @@ const useStyles = makeStyles((theme) => ({
   tbody: {
     color: 'blue',
     fontWeight: 'bold',
-    paddingLeft: '15px'
+    paddingLeft: '15px',
+    width: '100px'
   },
   buttonCell: {
     width: '80px'
+  },
+  tableName: {
+    padding: '15px',
+    textTransform: 'capitalize'
   }
 }));
 
@@ -119,7 +134,11 @@ function EnhancedTableHead(props) {
             )
           }else if(headCell.isAddButton){
             return (
-              <TableCell key={headCell.id} align='right'><Button>Add</Button></TableCell>
+              <TableCell key={headCell.id} align='right'>
+                <IconButton size="medium">
+                  <AddIcon />
+                </IconButton>
+              </TableCell>
             )
           }else return (
             <TableCell key={headCell.id} align='justify'/>
@@ -146,6 +165,7 @@ export default function EnhancedTable(props) {
   const [orderBy, setOrderBy] = React.useState('calories');
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [openTable, setOpenTable] = React.useState(false);
 
   const {rows, headCells} = props;
 
@@ -164,6 +184,10 @@ export default function EnhancedTable(props) {
     setPage(0);
   };
 
+  const handleOpenTable = () => {
+    setOpenTable(!openTable);
+  };
+
   let propIdCounter = 0;
 
   const getPropTableCell = (prop) => {
@@ -174,13 +198,13 @@ export default function EnhancedTable(props) {
       return null;
     }else{
       propIdCounter++;
-      return <TableCell key={propIdCounter} align="justify">{prop}</TableCell>
+      return <TableCell key={propIdCounter} align="justify" >{prop}</TableCell>
     }
   };
 
   const getPropTableCells = row => {
     return Object.keys(row).map(key => {
-      if(key.includes('prop')){
+      if(key.includes('propNum')){
         return getPropTableCell(row[key]);
       }
     });
@@ -189,43 +213,67 @@ export default function EnhancedTable(props) {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <TableContainer>
-          <Table
-            className={classes.table}
-          >
-            <EnhancedTableHead
-              classes={classes}
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-              headCells={headCells}
-            />
-            <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
-                  return (
-                    <TableRow hover tabIndex={-1} key={row.id}>
-                      <TableCell component="th" scope="row" padding="none" className={classes.tbody}>{row.name}</TableCell>
-                      {getPropTableCells(row)}
-                      <TableCell className={classes.buttonCell} align="right"><Button variant='outlined' >Edit</Button></TableCell>
-                      <TableCell className={classes.buttonCell} align="right"><Button variant='outlined' >Delete</Button></TableCell>
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
+        <Typography variant='h4' className={classes.tableName} onClick={handleOpenTable}>
+          <IconButton size="medium">
+            {openTable ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+          {props.tableName}
+        </Typography>
+        <Collapse in={openTable} timeout="auto" unmountOnExit>
+          <TableContainer>
+            <Table
+              className={classes.table}
+            >
+              <EnhancedTableHead
+                classes={classes}
+                order={order}
+                orderBy={orderBy}
+                onRequestSort={handleRequestSort}
+                rowCount={rows.length}
+                headCells={headCells}
+              />
+              <TableBody>
+                {stableSort(rows, getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => {
+                    return (
+                      <TableRow hover tabIndex={-1} key={row.id}>
+                        <TableCell component="th" scope="row" padding="none" className={classes.tbody}>
+                          <SimpleModal
+                            modalTitle={row.modalTitle}
+                            modalImage={row.modalImage}
+                            modalContent={row.modalContent}
+                          >
+                            {row.name}
+                          </SimpleModal>
+                        </TableCell>
+                        {getPropTableCells(row)}
+                        <TableCell className={classes.buttonCell} align="right">
+                          <IconButton size="medium">
+                            <EditIcon />
+                          </IconButton>
+                        </TableCell>
+                        <TableCell className={classes.buttonCell} align="right">
+                          <IconButton size="medium">
+                            <DeleteIcon />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
+        </Collapse>
       </Paper>
     </div>
   );
