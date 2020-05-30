@@ -18,17 +18,6 @@ export const fetchUsersSuccess = users => ({type: FETCH_USERS_SUCCESS, users});
 
 
 
-export const removeUserErrors = () => {
-  return async dispatch => {
-    try{
-      dispatch(loginUserFailure(null));
-      dispatch(registerUserFailure(null));
-    }catch(error){
-      console.log(error);
-    }
-  }
-};
-
 export const fetchUsers = () => {
   return async dispatch => {
     try{
@@ -108,6 +97,17 @@ export const deleteUser = userId => {
       toast.success(response.data.message)
     }catch(error){
       console.log(error)
+    }
+  }
+};
+
+export const removeUserErrors = () => {
+  return async dispatch => {
+    try{
+      dispatch(loginUserFailure(null));
+      dispatch(registerUserFailure(null));
+    }catch(error){
+      console.log(error);
     }
   }
 };

@@ -9,7 +9,6 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
-    "bootstrap": "^4.4.1",
     "connected-react-router": "^6.8.0",
     "history": "^4.10.1",
     "material-table": "^1.58.2",
@@ -21,7 +20,6 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "react-toastify": "^5.5.0",
-    "reactstrap": "^8.4.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0"
   },

@@ -14,6 +14,8 @@ router.post('/', async (req, res) => {
       title: req.body.title,
     };
 
+    if(categoryData.title.length <= 2) return res.status(400).send({errors: {title: {message: 'Category title is too short'}}});
+
     const category = new Category(categoryData);
 
     await category.save();
@@ -36,6 +38,18 @@ router.get('/', async (req, res) => {
   }
 });
 
+// get category by id
+
+router.get('/:id', async (req, res) => {
+  try{
+    const category = await Category.findById(req.params.id);
+
+    return res.send(category);
+  }catch(error){
+    return res.status(400).send(error);
+  }
+});
+
 // edit category
 
 router.patch('/:id', async (req, res) => {
@@ -47,6 +61,8 @@ router.patch('/:id', async (req, res) => {
     if(req.body.title){
       category.title = req.body.title;
     }
+
+    if(category.title.length <= 2) return res.status(400).send({errors: {title: {message: 'Category title is too short'}}});
 
     await category.save();
 

@@ -59,6 +59,18 @@ router.get('/', async (req, res) => {
   }
 });
 
+// find article by id
+
+router.get('/:id', async (req, res) => {
+  try{
+    const article = await Article.findById(req.params.id);
+
+    return res.send(article);
+  }catch(error){
+    return res.status(400).send(error);
+  }
+});
+
 // edit an article
 
 router.patch('/:id', [auth, permit('admin'), upload.single('image')], async (req, res) => {

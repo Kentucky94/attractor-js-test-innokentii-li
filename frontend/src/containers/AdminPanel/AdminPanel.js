@@ -29,6 +29,7 @@ class AdminPanel extends Component {
           propNum1: user.role,
           modalTitle,
           modalContent,
+          editPath: `/users/edit/${user._id}`,
         }
       });
     }
@@ -42,6 +43,7 @@ class AdminPanel extends Component {
           name: category.title,
           propNum1: '    ',
           modalTitle,
+          editPath: `/categories/edit/${category._id}`,
         }
       });
     }
@@ -60,6 +62,7 @@ class AdminPanel extends Component {
           modalTitle,
           modalImage,
           modalContent,
+          editPath: `/articles/edit/${article._id}`,
         }
       });
     }
@@ -75,7 +78,7 @@ class AdminPanel extends Component {
       { id: 'name', alignRight: false, label: 'Title', },
       { id: 'propNum1', alignRight: true, label: '', },
       { id: 'dummy1', alignRight: true, },
-      { id: 'addCell', alignRight: true, isAddButton: true, path: '/users/add', },
+      { id: 'addCell', alignRight: true, isAddButton: true, path: '/categories/create', },
     ];
 
     const articlesHeadCells = [
@@ -83,7 +86,7 @@ class AdminPanel extends Component {
       { id: 'propNum1', alignRight: true, label: 'Author', },
       { id: 'propNum2', alignRight: true, label: 'Category', },
       { id: 'dummy1', alignRight: true, },
-      { id: 'addCell', alignRight: true, isAddButton: true, path: '/users/add', },
+      { id: 'addCell', alignRight: true, isAddButton: true, path: '/articles/create', },
     ];
 
     return (
