@@ -111,7 +111,7 @@ router.patch('/:id', [auth, permit('admin'), upload.single('image')], async (req
 
 // delete an article
 
-router.delete('/', [auth, permit('admin')], async (req, res) => {
+router.delete('/:id', [auth, permit('admin')], async (req, res) => {
   try{
     const article = await Article.findById(req.params.id);
 

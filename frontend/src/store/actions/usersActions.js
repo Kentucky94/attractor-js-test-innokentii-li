@@ -8,6 +8,8 @@ export const LOGIN_USER_SUCCESS = 'LOGIN_USER_SUCCESS';
 export const LOGIN_USER_FAILURE = 'LOGIN_USER_FAILURE';
 export const LOGOUT_USER_SUCCESS = 'LOGOUT_USER_SUCCESS';
 export const FETCH_USERS_SUCCESS = 'FETCH_USERS_SUCCESS';
+export const FETCH_USERDATA_SUCCESS = 'FETCH_USERDATA_SUCCESS';
+export const EDIT_USER_FAILURE = 'EDIT_USER_FAILURE';
 
 export const registerUserSuccess = () => ({type: REGISTER_USER_SUCCESS});
 export const registerUserFailure = error => ({type: REGISTER_USER_FAILURE, error});
@@ -15,6 +17,8 @@ export const loginUserSuccess = user => ({type: LOGIN_USER_SUCCESS, user});
 export const loginUserFailure = error => ({type: LOGIN_USER_FAILURE, error});
 export const logoutUserSuccess = () => ({type: LOGOUT_USER_SUCCESS});
 export const fetchUsersSuccess = users => ({type: FETCH_USERS_SUCCESS, users});
+export const fetchUserDataSuccess = userData => ({type: FETCH_USERDATA_SUCCESS, userData});
+export const editUserFailure = error => ({type: EDIT_USER_FAILURE, error});
 
 
 
@@ -24,6 +28,18 @@ export const fetchUsers = () => {
       const response = await axiosOrders.get('/users');
 
       dispatch(fetchUsersSuccess(response.data));
+    }catch(error){
+      console.log(error);
+    }
+  }
+};
+
+export const fetchUserData = userId => {
+  return async dispatch => {
+    try{
+      const response = await axiosOrders.get(`/users/${userId}`);
+
+      dispatch(fetchUserDataSuccess(response.data));
     }catch(error){
       console.log(error);
     }
@@ -84,7 +100,11 @@ export const editUser = (userId, userData) => {
 
       dispatch(push('/'))
     }catch(error){
-      console.log(error)
+      if(error.response){
+        dispatch(editUserFailure(error.response.data))
+      }else{
+        dispatch(editUserFailure({global: 'No internet connection!'}))
+      }
     }
   }
 };
@@ -94,7 +114,8 @@ export const deleteUser = userId => {
     try{
       const response = await axiosOrders.delete(`/users/${userId}`);
 
-      toast.success(response.data.message)
+      toast.success(response.data.message);
+      dispatch(fetchUsers());
     }catch(error){
       console.log(error)
     }
@@ -106,6 +127,7 @@ export const removeUserErrors = () => {
     try{
       dispatch(loginUserFailure(null));
       dispatch(registerUserFailure(null));
+      dispatch(editUserFailure(null));
     }catch(error){
       console.log(error);
     }

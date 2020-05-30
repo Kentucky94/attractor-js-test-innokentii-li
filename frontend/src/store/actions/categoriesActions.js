@@ -71,7 +71,9 @@ export const editCategory = (categoryId, categoryData) => {
 export const deleteCategory = categoryId => {
   return async dispatch => {
     try{
-      await axiosOrders.delete(`/categories/${categoryId}`)
+      await axiosOrders.delete(`/categories/${categoryId}`);
+
+      dispatch(fetchCategories());
     }catch(error){
       console.log(error);
     }

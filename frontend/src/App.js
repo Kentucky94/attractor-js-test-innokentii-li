@@ -10,6 +10,7 @@ import ErrorPage from "./containers/ErrorPage/ErrorPage";
 import AdminPanel from "./containers/AdminPanel/AdminPanel";
 import CreateCategoryPage from "./containers/CreateCategoryPage/CreateCategoryPage";
 import CreateArticlePage from "./containers/CreateArticlePage/CreateArticlePage";
+import EditUserPage from "./containers/EditUserPage/EditUserPage";
 import EditCategoryPage from "./containers/EditCategoryPage/EditCategoryPage";
 import EditArticlePage from "./containers/EditArticlePage/EditArticlePage";
 
@@ -29,6 +30,7 @@ const App = () => {
         <ProtectedRoute isAllowed={user && user.role === 'admin'} path='/' exact component={AdminPanel} />
         <Route path='/login' exact component={Login} />
         <Route path='/register' exact component={Register} />
+        <ProtectedRoute isAllowed={user && user.role === 'admin'} path='/users/edit/:id' exact component={EditUserPage} />
         <ProtectedRoute isAllowed={user && user.role === 'admin'} path='/categories/create' exact component={CreateCategoryPage} />
         <ProtectedRoute isAllowed={user && user.role === 'admin'} path='/categories/edit/:id' exact component={EditCategoryPage} />
         <ProtectedRoute isAllowed={user && user.role === 'admin'} path='/articles/create' exact component={CreateArticlePage} />

@@ -50,7 +50,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-//  login a user
+// login a user
 
 router.post('/sessions', async (req, res) => {
   try{
@@ -98,10 +98,6 @@ router.patch('/:id', [auth, permit('admin')], async (req, res) => {
 
     if(!user) return res.status(400).send({error: 'No such user'});
 
-    if(req.body.username){
-      user.username = req.body.username;
-    }
-
     if(req.body.password){
       user.password = req.body.password;
     }
@@ -118,8 +114,9 @@ router.patch('/:id', [auth, permit('admin')], async (req, res) => {
 
 router.delete('/:id', [auth, permit('admin'), async (req, res) => {
   try{
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.params.id);
 
+    if(String(req.user._id) === String(user._id)) return res.status(500).send({error: 'You cannot delete your own account!'});
     if(!user) return res.status(400).send({error: 'No such user'});
 
     await User.deleteOne({_id: req.params.id});

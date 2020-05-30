@@ -80,7 +80,7 @@ router.delete('/:id', [auth, permit('admin')], async (req, res) => {
 
     if(!category) return res.status(400).send({error: 'No such category'});
 
-    await Category.deleteOne({_id: req.params._id});
+    await Category.deleteOne({_id: req.params.id});
 
     return res.send({message: "A category has been deleted"});
   }catch(error){

@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 
 import MasterTable from "../../components/MasterTable/MasterTable";
-import {fetchUsers} from "../../store/actions/usersActions";
-import {fetchCategories} from "../../store/actions/categoriesActions";
-import {fetchArticles} from "../../store/actions/articlesActions";
+import {deleteUser, fetchUsers} from "../../store/actions/usersActions";
+import {deleteCategory, fetchCategories} from "../../store/actions/categoriesActions";
+import {deleteArticle, fetchArticles} from "../../store/actions/articlesActions";
 
 class AdminPanel extends Component {
   async componentDidMount() {
@@ -22,6 +22,9 @@ class AdminPanel extends Component {
       usersRows = this.props.users.map(user => {
         const modalTitle = user.username;
         const modalContent = 'Role: ' + user.role;
+        const onDelete = userId => {
+          this.props.deleteUser(userId);
+        };
 
         return {
           id: user._id,
@@ -30,6 +33,7 @@ class AdminPanel extends Component {
           modalTitle,
           modalContent,
           editPath: `/users/edit/${user._id}`,
+          onDelete,
         }
       });
     }
@@ -37,6 +41,9 @@ class AdminPanel extends Component {
     if(this.props.categories){
       categoriesRows = this.props.categories.map(category => {
         const modalTitle = category.title;
+        const onDelete = categoryId => {
+          this.props.deleteCategory(categoryId);
+        };
 
         return {
           id: category._id,
@@ -44,6 +51,7 @@ class AdminPanel extends Component {
           propNum1: '    ',
           modalTitle,
           editPath: `/categories/edit/${category._id}`,
+          onDelete,
         }
       });
     }
@@ -53,6 +61,9 @@ class AdminPanel extends Component {
         const modalTitle = article.title;
         const modalContent = article.description;
         const modalImage = `http://localhost:8080/uploads/${article.image}`;
+        const onDelete = articleId => {
+          this.props.deleteArticle(articleId);
+        };
 
         return {
           id: article._id,
@@ -63,6 +74,7 @@ class AdminPanel extends Component {
           modalImage,
           modalContent,
           editPath: `/articles/edit/${article._id}`,
+          onDelete
         }
       });
     }
@@ -123,6 +135,9 @@ const mapDispatchToProps = dispatch => ({
   fetchUsers: () => dispatch(fetchUsers()),
   fetchCategories: () => dispatch(fetchCategories()),
   fetchArticles: () => dispatch(fetchArticles()),
+  deleteUser: userId => dispatch(deleteUser(userId)),
+  deleteCategory: categoryId => dispatch(deleteCategory(categoryId)),
+  deleteArticle: articleId => dispatch(deleteArticle(articleId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminPanel);

@@ -258,7 +258,7 @@ export default function EnhancedTable(props) {
                           </IconButton>
                         </TableCell>
                         <TableCell className={classes.buttonCell} align="right">
-                          <IconButton size="medium">
+                          <IconButton size="medium" onClick={() => row.onDelete(row.id)}>
                             <DeleteIcon />
                           </IconButton>
                         </TableCell>

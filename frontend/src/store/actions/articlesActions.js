@@ -60,6 +60,8 @@ export const deleteArticle = articleId => {
   return async dispatch => {
     try{
       await axiosOrders.delete(`/articles/${articleId}`);
+
+      dispatch(fetchArticles());
     }catch(error){
       console.log(error);
     }
