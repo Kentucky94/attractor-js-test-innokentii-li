@@ -57,9 +57,9 @@ export default function SimpleModal(props) {
         <div className={classes.paper}>
           <h2>{props.modalTitle}</h2>
           <img className={classes.image} src={props.modalImage} alt=""/>
-          <p className={classes.text}>
+          <div className={classes.text}>
             {props.modalContent}
-          </p>
+          </div>
         </div>
       </Modal>
     </div>
