@@ -4,6 +4,7 @@ const {nanoid} = require('nanoid');
 const config = require('./config');
 const User = require('./models/User');
 const Category = require('./models/Category');
+const Article = require('./models/Article');
 
 const run = async () => {
   await mongoose.connect(config.database, config.databaseOptions);
@@ -35,6 +36,44 @@ const run = async () => {
     title: 'Music'
   }, {
     title: 'Gaming'
+  });
+
+  await Article.create({
+    category: cat1,
+    user: user1,
+    title: 'Article 1',
+    description: 'Something about tech',
+    image: 'fixtures/image1.jpg'
+  }, {
+    category: cat2,
+    user: user2,
+    title: 'Article 2',
+    description: 'Something about music',
+    image: 'fixtures/image2.jpg'
+  }, {
+    category: cat3,
+    user: user3,
+    title: 'Article 3',
+    description: 'Something about gaming',
+    image: 'fixtures/image3.jpg'
+  },{
+    category: cat2,
+    user: user1,
+    title: 'Article 4',
+    description: 'Something about music again',
+    image: 'fixtures/image4.jpg'
+  }, {
+    category: cat3,
+    user: user2,
+    title: 'Article 5',
+    description: 'Something about gaming again',
+    image: 'fixtures/image5.jpg'
+  }, {
+    category: cat1,
+    user: user3,
+    title: 'Article 6',
+    description: 'Something about tech again',
+    image: 'fixtures/image6.jpg'
   });
 
   mongoose.connection.close();

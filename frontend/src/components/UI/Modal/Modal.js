@@ -1,18 +1,18 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+
 import Modal from '@material-ui/core/Modal';
 import Typography from "@material-ui/core/Typography";
-
-
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: 'absolute',
+    width: '90vw',
     maxWidth: 1000,
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
-    overflow: 'hidden',
+    overflow: 'scroll',
     padding: theme.spacing(2, 4, 3),
     top: `50%`,
     left: `50%`,
@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
   image: {
     maxWidth: 800,
+    width: '90%',
     margin: '20px',
   },
   typo: {
@@ -27,6 +28,10 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       color: '#b71c1c',
     }
+  },
+  text: {
+    width: '100%',
+    padding: '20px',
   }
 }));
 
@@ -52,7 +57,7 @@ export default function SimpleModal(props) {
         <div className={classes.paper}>
           <h2>{props.modalTitle}</h2>
           <img className={classes.image} src={props.modalImage} alt=""/>
-          <p>
+          <p className={classes.text}>
             {props.modalContent}
           </p>
         </div>

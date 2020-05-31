@@ -4,6 +4,7 @@ import {Link as RouterNavLink} from "react-router-dom";
 
 import UserMenu from "../UserMenu";
 import AnonymousMenu from "../AnonymousMenu";
+
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -38,7 +39,7 @@ const NavigationBar = () => {
       <AppBar position="static" className={classes.appbar}>
         <Toolbar className={classes.tbar}>
           <IconButton className={classes.tlink} edge="start" component={RouterNavLink} to='/'>
-            Admin App
+            App
           </IconButton>
           <div>
             {user ? <UserMenu user={user}/> : <AnonymousMenu />}
