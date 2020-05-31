@@ -65,17 +65,29 @@ class AdminPanel extends Component {
           this.props.deleteArticle(articleId);
         };
 
-        return {
+        const articleData = {
           id: article._id,
           name: article.title,
-          propNum1: article.user.username,
-          propNum2: article.category.title,
           modalTitle,
           modalImage,
           modalContent,
           editPath: `/articles/edit/${article._id}`,
           onDelete
+        };
+
+        if(article.user){
+          articleData.propNum1 = article.user.username;
+        }else{
+          articleData.propNum1 = 'Unknown';
         }
+
+        if(article.category){
+          articleData.propNum2 = article.category.title;
+        }else{
+          articleData.propNum2 = 'Unknown';
+        }
+
+        return articleData
       });
     }
 
